@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- kzed_v1alpha1_jcljob.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples
