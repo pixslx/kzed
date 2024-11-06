@@ -99,7 +99,6 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	if jclJob.Status.Status == "" {
 		logger.Info("Submitting JCLJob with path " + jclJob.Spec.Path)
 		zoweOut, err := exec.Command("sh", "-c", "zowe jobs submit data-set --rfj '"+jclJob.Spec.Path+"'").Output()
-		logger.Info(string(zoweOut))
 		if err != nil {
 			logger.Error(err, "error submitting job through ZOWE CLI")
 			return ctrl.Result{}, err
@@ -117,7 +116,6 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		jclJob.Status.ReturnCode = zoweResponse.Data.Retcode
 
 		r.Status().Update(ctx, jclJob)
-		return ctrl.Result{}, nil
 	} else {
 		logger.Info("Querying JCLJob with JobID " + jclJob.Status.JobID)
 		zoweOut, err := exec.Command("sh", "-c", "zowe jobs vw jsbj --rfj "+jclJob.Status.JobID).Output()
@@ -163,8 +161,10 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		}
 
 		r.Status().Update(ctx, jclJob)
-		return ctrl.Result{}, nil
 	}
+
+	return ctrl.Result{}, nil
+
 }
 
 // SetupWithManager sets up the controller with the Manager.

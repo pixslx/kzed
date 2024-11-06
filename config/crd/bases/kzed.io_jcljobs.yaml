@@ -41,6 +41,9 @@ spec:
             properties:
               path:
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
             type: object
           status:
             description: JCLJobStatus defines the observed state of JCLJob

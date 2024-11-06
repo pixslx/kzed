@@ -28,6 +28,8 @@ type JCLJobSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
+	//+kubebuilder:validation:Required
+	//+kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	Path string `json:"path,omitempty"`
 }
 
