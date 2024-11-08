@@ -39,13 +39,20 @@ spec:
           spec:
             description: JCLJobSpec defines the desired state of JCLJob
             properties:
+              dsPath:
+                description: Path of DataSet on the Mainframe with JCL to be submitted
+                  (e.g. USERID.SOURCE(SOMEJCL))
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               jcl:
                 description: JCL script to be submitted
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: self == oldSelf
-              path:
+              ussPath:
                 description: Path of DataSet on the Mainframe with JCL to be submitted
                   (e.g. USERID.SOURCE(SOMEJCL))
                 type: string
@@ -53,14 +60,12 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
             type: object
-            x-kubernetes-validations:
-            - message: Either path or jcl needs to be defined
-              rule: (has(self.jcl) == true && size(self.jcl) > 0 && has(self.path)
-                == false) || (has(self.jcl) == false && has(self.path) == true &&
-                size(self.path) > 0)
           status:
             description: JCLJobStatus defines the observed state of JCLJob
             properties:
+              finishedAt:
+                format: date-time
+                type: string
               jobid:
                 type: string
               jobname:
@@ -80,6 +85,9 @@ spec:
                       type: string
                   type: object
                 type: array
+              startedAt:
+                format: date-time
+                type: string
               status:
                 type: string
             type: object

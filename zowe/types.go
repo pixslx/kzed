@@ -41,3 +41,19 @@ type ZOWEJobSpoolsOutputData struct {
 	ProcName string `json:"procName"`
 	Data     string `json:"data"`
 }
+
+type ZOWEFileUploadOutput struct {
+	Success  bool                     `json:"success"`
+	ExitCode int                      `json:"exitCode"`
+	Message  string                   `json:"message"`
+	Stdout   string                   `json:"stdout"`
+	Stderr   string                   `json:"stderr"`
+	Data     ZOWEFileUploadOutputData `json:"data"`
+	Error    struct{}                 `json:"error"`
+}
+
+type ZOWEFileUploadOutputData struct {
+	Success         bool     `json:"success"`
+	CommandResponse string   `json:"commandResponse"`
+	APIResponse     struct{} `json:"apiResponse"`
+}

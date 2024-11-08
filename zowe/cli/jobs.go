@@ -7,8 +7,23 @@ import (
 	"os/exec"
 )
 
-func (z *ZOWECLI) JobSubmitPath(path string) (zowe.ZOWEJobSubmitOutput, error) {
+func (z *ZOWECLI) JobSubmitDSPath(path string) (zowe.ZOWEJobSubmitOutput, error) {
 	zoweOut, err := exec.Command("sh", "-c", "zowe jobs submit data-set --rfj '"+path+"'").Output()
+	if err != nil {
+		return zowe.ZOWEJobSubmitOutput{}, err
+	}
+
+	zoweResponse := zowe.ZOWEJobSubmitOutput{}
+	err = json.Unmarshal(zoweOut, &zoweResponse)
+	if err != nil {
+		return zowe.ZOWEJobSubmitOutput{}, err
+	}
+
+	return zoweResponse, nil
+}
+
+func (z *ZOWECLI) JobSubmitUSSPath(path string) (zowe.ZOWEJobSubmitOutput, error) {
+	zoweOut, err := exec.Command("sh", "-c", "zowe jobs submit uss-file --rfj '"+path+"'").Output()
 	if err != nil {
 		return zowe.ZOWEJobSubmitOutput{}, err
 	}

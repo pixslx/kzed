@@ -44,6 +44,7 @@ import (
 var (
 	scheme   = runtime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
+	Zowe     = zowecli.NewZOWECLI()
 )
 
 func init() {
@@ -133,7 +134,7 @@ func main() {
 	if err = (&controller.JCLJobReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
-		Zowe:   zowecli.NewZOWECLI(),
+		Zowe:   Zowe,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "JCLJob")
 		os.Exit(1)

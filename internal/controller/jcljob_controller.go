@@ -65,12 +65,16 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	}
 
 	if jclJob.Status.Status == "" {
-		logger.Info("Submitting JCLJob with path " + jclJob.Spec.Path)
 		zoweResponse := zowe.ZOWEJobSubmitOutput{}
-		if len(jclJob.Spec.Path) > 0 {
-			zoweResponse, err = r.Zowe.JobSubmitPath(jclJob.Spec.Path)
+		if len(jclJob.Spec.DSPath) > 0 {
+			logger.Info("Submitting JCLJob with DataSet path " + jclJob.Spec.DSPath)
+			zoweResponse, err = r.Zowe.JobSubmitDSPath(jclJob.Spec.DSPath)
 		} else if len(jclJob.Spec.JCL) > 0 {
+			logger.Info("Submitting JCLJob with inline defined JCL script")
 			zoweResponse, err = r.Zowe.JobSubmitJCL(jclJob.Spec.JCL)
+		} else if len(jclJob.Spec.USSPath) > 0 {
+			logger.Info("Submitting JCLJob with USS path " + jclJob.Spec.USSPath)
+			zoweResponse, err = r.Zowe.JobSubmitUSSPath(jclJob.Spec.USSPath)
 		} else {
 			logger.Error(err, "Neither path nor jcl have been specified")
 			return ctrl.Result{}, nil
@@ -84,7 +88,7 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		jclJob.Status.JobID = zoweResponse.Data.Jobid
 		jclJob.Status.JobName = zoweResponse.Data.Jobname
 		jclJob.Status.ReturnCode = zoweResponse.Data.Retcode
-		jclJob.Status.StartedAt = time.Now()
+		jclJob.Status.StartedAt.Time = time.Now()
 
 		r.Status().Update(ctx, jclJob)
 	} else {
@@ -95,13 +99,15 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			return ctrl.Result{}, err
 		}
 
+		oldStatus := jclJob.Status.Status
+
 		jclJob.Status.Status = zoweResponse.Data.Status
 		jclJob.Status.JobID = zoweResponse.Data.Jobid
 		jclJob.Status.JobName = zoweResponse.Data.Jobname
 		jclJob.Status.ReturnCode = zoweResponse.Data.Retcode
 
 		if jclJob.Status.Status == "OUTPUT" {
-			jclJob.Status.FinishedAt = time.Now()
+			jclJob.Status.FinishedAt.Time = time.Now()
 
 			logger.Info("Querying JCLJob spools with JobID " + jclJob.Status.JobID)
 			zoweSpoolsResponse, err := r.Zowe.JobGetSpoolFiles(jclJob.Status.JobID)
@@ -122,6 +128,11 @@ func (r *JCLJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		}
 
 		r.Status().Update(ctx, jclJob)
+
+		if oldStatus == "ACTIVE" && jclJob.Status.Status == "ACTIVE" {
+			return ctrl.Result{RequeueAfter: 10 * time.Second}, nil
+		}
+
 	}
 
 	return ctrl.Result{}, nil
