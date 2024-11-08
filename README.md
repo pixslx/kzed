@@ -1,8 +1,11 @@
 # kzed
-// TODO(user): Add simple overview of use/purpose
+Kubernetes operator for integration with IBM Mainframe through ZOWE
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+This Kubernetes operator enables zOS management through K8s CRDs in kubernetes-native way.
+
+At this moment the following CRDs are awailable:
+JCLJob - enables zOS job management like starting the jobs from JCLs in zOS DataSets or inline JCL definition. JCLJob objects also enables the monitoring of Job execution and insight into job spool outputs.
 
 ## Getting Started
 
