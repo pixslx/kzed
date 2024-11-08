@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"time"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -24,13 +26,18 @@ import (
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // JCLJobSpec defines the desired state of JCLJob
+// +kubebuilder:validation:XValidation:rule="(has(self.jcl) == true && size(self.jcl) > 0 && has(self.path) == false) || (has(self.jcl) == false && has(self.path) == true && size(self.path) > 0)",message="Either path or jcl needs to be defined"
 type JCLJobSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	//+kubebuilder:validation:Required
+	// Path of DataSet on the Mainframe with JCL to be submitted (e.g. USERID.SOURCE(SOMEJCL))
 	//+kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	Path string `json:"path,omitempty"`
+
+	// JCL script to be submitted
+	//+kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
+	JCL string `json:"jcl,omitempty"`
 }
 
 // JCLJobStatus defines the observed state of JCLJob
@@ -42,6 +49,8 @@ type JCLJobStatus struct {
 	JobName    string             `json:"jobname,omitempty"`
 	Status     string             `json:"status,omitempty"`
 	ReturnCode string             `json:"retcode,omitempty"`
+	StartedAt  time.Time          `json:"startedAt,omitempty" protobuf:"bytes,8,opt,name=creationTimestamp"`
+	FinishedAt time.Time          `json:"finishedAt,omitempty" protobuf:"bytes,8,opt,name=creationTimestamp"`
 	SpoolFiles []JCLJobSpoolFiles `json:"spools,omitempty"`
 }
 
@@ -60,7 +69,9 @@ type JCLJob struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   JCLJobSpec   `json:"spec,omitempty"`
+	//+required
+	Spec JCLJobSpec `json:"spec,omitempty"`
+
 	Status JCLJobStatus `json:"status,omitempty"`
 }
 
