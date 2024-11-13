@@ -133,8 +133,8 @@ func (r *PartitionedDataSetReconciler) Reconcile(ctx context.Context, req ctrl.R
 	} else if pds.Status.Status == "CREATED" || pds.Status.Status == "SYNCED" {
 		membersInCR := map[string]bool{}
 		for fileName, fileContent := range pds.Data {
-			membersInCR[fileName] = true
-			zoweResponse, err := r.Zowe.FilesUploadSTDIN2DS(pdsPath+"("+fileName+")", fileContent)
+			membersInCR[strings.ToUpper(fileName)] = true
+			zoweResponse, err := r.Zowe.FilesUploadSTDIN2DS(strings.ToUpper(pdsPath+"("+fileName+")"), fileContent)
 			if err != nil {
 				logger.Error(err, "error uploading content to PartitionedDataSet through ZOWE CLI")
 				return ctrl.Result{}, err
@@ -147,7 +147,7 @@ func (r *PartitionedDataSetReconciler) Reconcile(ctx context.Context, req ctrl.R
 		zoweResponse, err := r.Zowe.FilesDSListMembers(pdsPath)
 		if err == nil {
 			for _, pdsItem := range zoweResponse.Data.APIResponse.Items {
-				_, existsInCR := membersInCR[pdsItem.Member]
+				_, existsInCR := membersInCR[strings.ToUpper(pdsItem.Member)]
 				if !existsInCR {
 					err = r.Zowe.FilesDSDelete(strings.ToUpper(pdsPath + "(" + pdsItem.Member + ")"))
 					if err != nil {
