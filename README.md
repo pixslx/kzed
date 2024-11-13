@@ -4,9 +4,11 @@ Kubernetes operator for integration with IBM Mainframe through ZOWE
 ## Description
 This Kubernetes operator enables zOS management through K8s CRDs in kubernetes-native way.
 
-At this moment the following CRDs are awailable:
-JCLJob - enables zOS job management like starting the jobs from JCLs in zOS DataSets or inline JCL definition. JCLJob objects also enables the monitoring of Job execution and insight into job spool outputs.
-PartitionedDataSet - enables zOS PDS creation and upload of its members. The Members can be defined in the resource itself much like a data in ConfigMap or Secret can be defined.
+At this moment the following CRDs are available:
+
+**JCLJob** - enables zOS job management like starting the jobs from JCLs in zOS DataSets or inline JCL definition. JCLJob objects also enables the monitoring of Job execution and insight into job spool outputs.
+
+**PartitionedDataSet** - enables zOS PDS creation and upload of its members. The Members can be defined in the resource itself much like a data in ConfigMap or Secret can be defined.
 
 ## Getting Started
 
