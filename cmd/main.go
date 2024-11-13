@@ -103,6 +103,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	sysuidCmdOut, err := exec.Command("sh", "-c", "cat /zowe-config/SYSUID").Output()
+	if err != nil {
+		setupLog.Error(err, "unable to get SYSUID")
+		os.Exit(1)
+	}
+	SYSUID := string(sysuidCmdOut)
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme: scheme,
 		Metrics: metricsserver.Options{
@@ -143,7 +150,7 @@ func main() {
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 		Zowe:   Zowe,
-		SYSUID: "Z46083",
+		SYSUID: SYSUID,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "PartitionedDataSet")
 		os.Exit(1)
