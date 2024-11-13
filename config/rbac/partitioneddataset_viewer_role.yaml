@@ -1,0 +1,23 @@
+# permissions for end users to view partitioneddatasets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: kzed
+    app.kubernetes.io/managed-by: kustomize
+  name: partitioneddataset-viewer-role
+rules:
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets/status
+  verbs:
+  - get

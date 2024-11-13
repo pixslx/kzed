@@ -1,0 +1,5 @@
+## Append samples of your project ##
+resources:
+- kzed_v1alpha1_jcljob.yaml
+- kzed_v1alpha1_partitioneddataset.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

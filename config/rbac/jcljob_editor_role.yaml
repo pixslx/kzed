@@ -1,0 +1,27 @@
+# permissions for end users to edit jcljobs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: kzed
+    app.kubernetes.io/managed-by: kustomize
+  name: jcljob-editor-role
+rules:
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs/status
+  verbs:
+  - get

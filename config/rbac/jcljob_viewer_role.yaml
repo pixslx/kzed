@@ -1,0 +1,23 @@
+# permissions for end users to view jcljobs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: kzed
+    app.kubernetes.io/managed-by: kustomize
+  name: jcljob-viewer-role
+rules:
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs/status
+  verbs:
+  - get

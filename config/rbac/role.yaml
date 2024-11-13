@@ -1,0 +1,58 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - kzed.io
+  resources:
+  - jcljobs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets/status
+  verbs:
+  - get
+  - patch
+  - update

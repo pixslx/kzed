@@ -1,0 +1,9 @@
+apiVersion: kzed.io/v1alpha1
+kind: PartitionedDataSet
+metadata:
+  labels:
+    app.kubernetes.io/name: kzed
+    app.kubernetes.io/managed-by: kustomize
+  name: partitioneddataset-sample
+spec:
+  # TODO(user): Add fields here

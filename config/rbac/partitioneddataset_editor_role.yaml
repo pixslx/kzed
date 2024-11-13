@@ -1,0 +1,27 @@
+# permissions for end users to edit partitioneddatasets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: kzed
+    app.kubernetes.io/managed-by: kustomize
+  name: partitioneddataset-editor-role
+rules:
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - partitioneddatasets/status
+  verbs:
+  - get
