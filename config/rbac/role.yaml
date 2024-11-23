@@ -56,3 +56,29 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - kzed.io
+  resources:
+  - sequentialdatasets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kzed.io
+  resources:
+  - sequentialdatasets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - kzed.io
+  resources:
+  - sequentialdatasets/status
+  verbs:
+  - get
+  - patch
+  - update

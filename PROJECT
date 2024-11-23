@@ -33,4 +33,13 @@ resources:
   kind: PartitionedDataSet
   path: kzed/m/v2/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: io
+  group: kzed
+  kind: SequentialDataSet
+  path: kzed/m/v2/api/v1alpha1
+  version: v1alpha1
 version: "3"

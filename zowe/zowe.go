@@ -12,4 +12,6 @@ type ZOWE interface {
 	FilesDSExists(path string) bool
 	FilesDSDelete(path string) error
 	FilesDSListMembers(path string) (ZOWEFileOutput, error)
+
+	FilesCreateSDS(input ZOWEDataSetCreateInput) (ZOWEFileOutput, error)
 }

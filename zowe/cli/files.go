@@ -35,13 +35,17 @@ func (z *ZOWECLI) FilesUploadSTDIN2DS(path string, content string) (zowe.ZOWEFil
 	return zoweResponse, nil
 }
 
-func (z *ZOWECLI) FilesCreatePDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFileOutput, error) {
+func (z *ZOWECLI) filesCreateDSCmd(input zowe.ZOWEDataSetCreateInput, dsType string) string {
 	var zoweCmd strings.Builder
 	if input.Like != "" {
 		zoweCmd.WriteString("zowe files cre ds --rfj '" + input.Name + "'")
 		zoweCmd.WriteString(" --lk '" + input.Like + "'")
-	} else {
+	} else if dsType == "PDS" {
 		zoweCmd.WriteString("zowe files cre pds --rfj '" + input.Name + "'")
+	} else if dsType == "SDS" {
+		zoweCmd.WriteString("zowe files cre ps --rfj '" + input.Name + "'")
+	} else {
+		return ""
 	}
 	if input.AllocationSpaceUnit != "" {
 		zoweCmd.WriteString(" --asu " + input.AllocationSpaceUnit)
@@ -86,8 +90,33 @@ func (z *ZOWECLI) FilesCreatePDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFi
 		zoweCmd.WriteString(" --ss " + fmt.Sprint(input.SecondarySpace))
 	}
 
-	z.logger.Info("Issuing ZOWE Command " + zoweCmd.String())
-	zoweOut, err := exec.Command("sh", "-c", zoweCmd.String()).Output()
+	return zoweCmd.String()
+}
+
+func (z *ZOWECLI) FilesCreatePDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFileOutput, error) {
+	zoweCmd := z.filesCreateDSCmd(input, "PDS")
+
+	z.logger.Info("Issuing ZOWE Command " + zoweCmd)
+	zoweOut, err := exec.Command("sh", "-c", zoweCmd).Output()
+	if err != nil {
+		z.logger.Error(err, string(zoweOut))
+		return zowe.ZOWEFileOutput{}, err
+	}
+
+	zoweResponse := zowe.ZOWEFileOutput{}
+	err = json.Unmarshal(zoweOut, &zoweResponse)
+	if err != nil {
+		return zowe.ZOWEFileOutput{}, err
+	}
+
+	return zoweResponse, nil
+}
+
+func (z *ZOWECLI) FilesCreateSDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFileOutput, error) {
+	zoweCmd := z.filesCreateDSCmd(input, "SDS")
+
+	z.logger.Info("Issuing ZOWE Command " + zoweCmd)
+	zoweOut, err := exec.Command("sh", "-c", zoweCmd).Output()
 	if err != nil {
 		z.logger.Error(err, string(zoweOut))
 		return zowe.ZOWEFileOutput{}, err

@@ -1,0 +1,148 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: sequentialdatasets.kzed.io
+spec:
+  group: kzed.io
+  names:
+    kind: SequentialDataSet
+    listKind: SequentialDataSetList
+    plural: sequentialdatasets
+    singular: sequentialdataset
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SequentialDataSet is the Schema for the sequentialdatasets API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          data:
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SequentialDataSetSpec defines the desired state of SequentialDataSet
+            properties:
+              block-size:
+                description: 'The block size for the data set (for example, 6160).
+                  Default value: 6160.'
+                type: integer
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              data-class:
+                description: The block size for the data set (for example, 6160)
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              device-type:
+                description: The device type, also known as 'unit'
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              directory-blocks:
+                description: 'The number of directory blocks (for example, 25). Default
+                  value: 5.'
+                type: integer
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              like:
+                description: Name of an existing data set to base your new data set's
+                  properties on
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              management-class:
+                description: The SMS management class to use for the allocation.
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              primary-space:
+                description: 'The primary space allocation (for example, 5). Default
+                  value: 1.'
+                type: integer
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              record-format:
+                description: 'The record format for the data set (for example, FB
+                  for "Fixed Block"). Default value: FB.'
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              record-length:
+                description: 'The logical record length. Analogous to the length of
+                  a line (for example, 80). Default value: 80.'
+                type: integer
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              secondary-space:
+                description: The secondary space allocation (for example, 1).
+                type: integer
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              size:
+                description: The size of the data set (specified as nCYL or nTRK -
+                  where n is the number of cylinders or tracks). Sets the primary
+                  allocation (the secondary allocation becomes ~10% of the primary).
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              storage-class:
+                description: The SMS storage class to use for the allocation.
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              volume-serial:
+                description: "The volume serial (VOLSER) on which you want the data
+                  set to be placed. A VOLSER\tis analogous to a drive name on a PC."
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+            type: object
+          status:
+            description: SequentialDataSetStatus defines the observed state of SequentialDataSet
+            properties:
+              createdAt:
+                format: date-time
+                type: string
+              lastSyncAt:
+                format: date-time
+                type: string
+              status:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

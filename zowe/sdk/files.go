@@ -10,6 +10,10 @@ func (z *ZOWESDK) FilesCreatePDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFi
 	return zowe.ZOWEFileOutput{}, nil
 }
 
+func (z *ZOWESDK) FilesCreateSDS(input zowe.ZOWEDataSetCreateInput) (zowe.ZOWEFileOutput, error) {
+	return zowe.ZOWEFileOutput{}, nil
+}
+
 func (z *ZOWESDK) FilesDSExists(path string) bool {
 	return false
 }

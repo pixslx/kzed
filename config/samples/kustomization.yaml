@@ -2,4 +2,5 @@
 resources:
 - kzed_v1alpha1_jcljob.yaml
 - kzed_v1alpha1_partitioneddataset.yaml
+- kzed_v1alpha1_sequentialdataset.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
