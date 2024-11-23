@@ -10,6 +10,8 @@ At this moment the following CRDs are available:
 
 **PartitionedDataSet** - enables zOS PDS creation and upload of its members. The Members can be defined in the resource itself much like a data in ConfigMap or Secret can be defined.
 
+**SequentialDataSet** - enables zOS sequential data set creation and upload of its data. Data can be defined in the resource itself much like a data in ConfigMap or Secret can be defined.
+
 ## Getting Started
 
 ### Prerequisites
