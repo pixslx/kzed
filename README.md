@@ -46,6 +46,18 @@ make deploy IMG=<some-registry>/kzed:tag
 > **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
 privileges or be logged in as admin.
 
+**Create zowe-config secret**
+
+There are examples of Zowe configuration in ```zowe-config``` folder. Edit ```zove.config.json``` and update the values according your environment. Create secret with the following command: 
+
+```oc -n kzed-system create secret generic zowe-config --from-file=zowe.config.json --from-file=zowe.schema.json --from-literal SYSUID=<SYSUID>```
+
+Change SYSUID value according to your zOS username.
+
+Mount ```zowe-config``` secret to operator deployment to ```/zowe-config```
+
+```oc -n kzed-system set volume deployment/kzed-controller-manager --add --type=secret --secret-name=zowe-config --mount-path=/zowe-config```
+
 **Create instances of your solution**
 You can apply the samples (examples) from the config/sample:
 
